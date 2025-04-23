@@ -6,6 +6,7 @@
 <br>
 <img src="https://logosrated.net/wp-content/uploads/parser/Neovim-Logo-1.png" width="132" height="150">  
 
+<strong>DONWLOAD THE NVIM FOLDER!!! <em>not this code</em></strong>
 <pre>
   <code>
 -- Set leader key
