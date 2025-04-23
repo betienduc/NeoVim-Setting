@@ -166,7 +166,7 @@ require("lazy").setup({
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "tsserver", "clangd" },
+        ensure_installed = { "lua_ls", "typescript-language-server", "clangd" },
         automatic_installation = true,
       })
 
@@ -183,8 +183,73 @@ require("lazy").setup({
     end,
   },
 
-})
+    -- 🔍 Fuzzy Finder: Telescope
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      local telescope = require("telescope")
+      telescope.setup({
+        defaults = {
+          layout_config = {
+            horizontal = { preview_width = 0.6 },
+          },
+          sorting_strategy = "ascending",
+          layout_strategy = "horizontal",
+        },
+      })
 
+      -- Keymap ví dụ
+      vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "🔍 Find files" })
+      vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "🔍 Live grep" })
+      vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "🔍 Find buffers" })
+      vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "🔍 Help tags" })
+    end,
+  },
+
+  -- 🖼 Start screen: Alpha
+  {
+    "goolord/alpha-nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("alpha").setup(require("alpha.themes.dashboard").config)
+    end,
+  },
+
+-- 🔔 UI đẹp Snack
+ {
+  "folke/snacks.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+  },
+  opts = {
+    notifier = {
+      enabled = true,
+      background_colour = "#1e1e2e", -- hợp với catppuccin
+      timeout = 3000,
+    },
+    dashboard = {
+      enabled = true,
+    },
+    explorer = {
+      enabled = true,
+    },
+  },
+  config = function(_, opts)
+    local snacks = require("snacks")
+    snacks.setup(opts)
+
+    -- Dùng notifier của snacks làm notify chính
+    vim.notify = snacks.notifier.notify
+  end,
+},
+
+
+
+})
 
   </code>
 </pre>
