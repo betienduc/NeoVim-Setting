@@ -247,8 +247,51 @@ require("lazy").setup({
   end,
 },
 
-
-
+{
+  "folke/noice.nvim",
+  event = "VeryLazy",
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+    "nvim-lua/plenary.nvim",
+    -- (tuỳ chọn) dùng để override `vim.notify`
+    "rcarriga/nvim-notify",
+  },
+  config = function()
+    require("noice").setup({
+      lsp = {
+        progress = { enabled = true },
+        signature = { enabled = true },
+        hover = { enabled = true },
+        message = { enabled = true },
+      },
+      presets = {
+        bottom_search = false,  -- ❌ search vẫn ở dưới
+        command_palette = true, -- ✅ floating cmdline
+        long_message_to_split = true,
+        inc_rename = true,
+        lsp_doc_border = true,
+      },
+      views = {
+        cmdline_popup = {
+          position = {
+            row = 5,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = "auto",
+          },
+          border = {
+            style = "rounded",
+          },
+          win_options = {
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+          },
+        },
+      },
+    })
+  end,
+}
 })
 
   </code>
