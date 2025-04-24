@@ -11,6 +11,17 @@
 ```
 -- Set leader key
 vim.g.mapleader = " "
+-- 👁️ Hiển thị số dòng
+vim.opt.number = true
+vim.opt.relativenumber = false -- hoặc true nếu bạn thích dòng tương đối
+
+-- ⬅️ Cấu hình tab & thụt lề
+vim.opt.tabstop = 4 -- số space cho mỗi tab
+vim.opt.shiftwidth = 4 -- số space khi thụt dòng bằng >>
+vim.opt.expandtab = true -- dùng space thay vì ký tự tab
+vim.opt.smartindent = true
+-- 🎨 Tô màu xanh cho viền của Neo-tree
+vim.cmd([[highlight NeoTreeBorder guifg=#80a0ff]])
 
 -- Load lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -78,7 +89,8 @@ require("lazy").setup(
                         },
                         window = {
                             width = 30,
-                            position = "left",
+                            position = "float",
+                            border = "rounded", -- ✅ Viền bo tròn
                             mappings = {
                                 ["<Space>"] = "toggle_node",
                                 ["<CR>"] = "open",
@@ -87,6 +99,10 @@ require("lazy").setup(
                                 ["r"] = "rename",
                                 ["n"] = "add",
                                 ["d"] = "delete"
+                            },
+                            win_config = {
+                                border = "rounded",
+                                winhighlight = "FloatBorder:NeoTreeBorder" -- ✅ Dùng highlight riêng
                             }
                         },
                         default_component_configs = {
