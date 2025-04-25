@@ -1,14 +1,15 @@
 # ***NeoVim-Setting***
->Just <strong><em>init.lua</em></strong>
+>Just <strong><em>`init.lua`</em></strong>
 
 <br>
-<strong>How do I quit Vim?</strong>
+<h3><strong>How do I quit Vim?</strong></h3>
+
 <br>
 <img src="https://logosrated.net/wp-content/uploads/parser/Neovim-Logo-1.png" width="132" height="150">  
 
-___Remember to download "Lazy.nvim", "ripgrep" and "fd"___
+#### ___Remember to download "Lazy.nvim", "ripgrep" and "fd"___
 
-***Plugins:***
+### ***Plugins:***
    * ● alpha-nvim 
    *  ● catppuccin <em>(4 themes)</em>
          * Latte <em>(light theme)</em>
@@ -373,7 +374,7 @@ require("lazy").setup(
 
 
 
-___Optional Banner:___
+<h3><em>Optional Banner:</em></h3>
 
 <em>Preview:</em>
 
@@ -381,7 +382,7 @@ ___Optional Banner:___
 
 
 
-#<em>Replace it at line 272</em>
+#<em>Replacement starting from line 243</em>
 ```
 dashboard.section.header.val = {
                     [[                                                                       ]],
