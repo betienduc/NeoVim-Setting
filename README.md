@@ -371,7 +371,17 @@ require("lazy").setup(
 
 ```
 
+
+
 ___Optional Banner:___
+
+<em>Preview:</em>
+
+![optionalbanner](optionalnvimbanner.PNG)
+
+
+
+#<em>Replace it at line 272</em>
 ```
 dashboard.section.header.val = {
                     [[                                                                       ]],
@@ -391,3 +401,13 @@ dashboard.section.header.val = {
                     [[                                                                       ]]
                 }
 ```
+
+
+___Default Banner:___
+
+
+
+
+#<em>Preview:</em>
+
+![defaultbanner](defaultnvimbanner.PNG)
