@@ -6,8 +6,36 @@
 <br>
 <img src="https://logosrated.net/wp-content/uploads/parser/Neovim-Logo-1.png" width="132" height="150">  
 
+___Remember to download "Lazy.nvim", "ripgrep" and "fd"___
 
-
+***Plugins:***
+   * ● alpha-nvim 
+   *  ● catppuccin <em>(4 themes)</em>
+         * Latte <em>(light theme)</em>
+         * Frappe <em>(semi-light theme)</em>
+         * Macchiato <em>(semi-dark theme)</em>
+         * Mocha <em>(dark theme)</em>
+   * ● cmp-nvim-lsp | cmp_nvim_lsp | nvim-lspconfig
+   * ● conform.nvim  
+   * ● lazy.nvim 
+   * ● lualine.nvim 
+   * ● mason-lspconfig.nvim | nvim-lspconfig
+   * ● mason.nvim | nvim-lspconfig
+   * ● neo-tree.nvim 
+   * ● noice.nvim 
+   * ● nui.nvim | snacks.nvim
+   * ● nvim-lspconfig
+   * ● nvim-notify | noice.nvim
+   * ● nvim-web-devicons | alpha-nvim
+   * ● plenary.nvim | snacks.nvim
+   * ● snacks.nvim 
+   * ● telescope.nvim 
+   * ○ cmp-buffer | nvim-cmp 
+   * ○ cmp-path | nvim-cmp 
+   * ○ cmp_luasnip | nvim-cmp 
+   * ○ friendly-snippets | nvim-cmp 
+   * ○ LuaSnip | nvim-cmp 
+   * ○ nvim-cmp | InsertEnter
 ```
 -- Set leader key
 vim.g.mapleader = " "
