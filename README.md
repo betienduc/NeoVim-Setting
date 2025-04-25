@@ -30,13 +30,16 @@
    * ● nvim-web-devicons | alpha-nvim
    * ● plenary.nvim | snacks.nvim
    * ● snacks.nvim 
-   * ● telescope.nvim 
+   * ● telescope.nvim
+   * ● dressing.nvim
    * ○ cmp-buffer | nvim-cmp 
    * ○ cmp-path | nvim-cmp 
    * ○ cmp_luasnip | nvim-cmp 
    * ○ friendly-snippets | nvim-cmp 
    * ○ LuaSnip | nvim-cmp 
    * ○ nvim-cmp | InsertEnter
+
+### UPDATE: Pop-up caculator `<leader>=`
 ```
 -- Set leader key
 vim.g.mapleader = " "
@@ -51,6 +54,29 @@ vim.opt.expandtab = true -- dùng space thay vì ký tự tab
 vim.opt.smartindent = true
 -- 🎨 Tô màu xanh cho viền của Neo-tree
 vim.cmd([[highlight NeoTreeBorder guifg=#80a0ff]])
+
+vim.keymap.set(
+    "n",
+    "<leader>=",
+    function()
+        vim.ui.input(
+            {
+                prompt = "Enter expression:",
+                border = "rounded",
+                title = "🧮 Calculator"
+            },
+            function(expr)
+                local ok, result = pcall(load("return " .. expr))
+                if ok then
+                    vim.notify("Result: " .. result, vim.log.levels.INFO)
+                else
+                    vim.notify("Error: " .. result, vim.log.levels.ERROR)
+                end
+            end
+        )
+    end,
+    {desc = "🧮 Calculator popup"}
+)
 
 -- Load lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -99,198 +125,212 @@ require("lazy").setup(
                 )
             end
         },
-        -- 📁 File Explorer
         {
-            "nvim-neo-tree/neo-tree.nvim",
-            branch = "v3.x",
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "nvim-tree/nvim-web-devicons",
-                "MunifTanjim/nui.nvim"
-            },
-            config = function()
-                require("neo-tree").setup(
-                    {
-                        filesystem = {
-                            filtered_items = {visible = true},
-                            follow_current_file = true,
-                            use_libuv_file_watcher = true
-                        },
-                        window = {
-                            width = 30,
-                            position = "float",
-                            border = "rounded", -- ✅ Viền bo tròn
-                            mappings = {
-                                ["<Space>"] = "toggle_node",
-                                ["<CR>"] = "open",
-                                ["o"] = "open",
-                                ["O"] = "system_open",
-                                ["r"] = "rename",
-                                ["n"] = "add",
-                                ["d"] = "delete"
+            -- 📁 File Explorer
+            {
+                "nvim-neo-tree/neo-tree.nvim",
+                branch = "v3.x",
+                dependencies = {
+                    "nvim-lua/plenary.nvim",
+                    "nvim-tree/nvim-web-devicons",
+                    "MunifTanjim/nui.nvim"
+                },
+                config = function()
+                    require("neo-tree").setup(
+                        {
+                            filesystem = {
+                                filtered_items = {visible = true},
+                                follow_current_file = true,
+                                use_libuv_file_watcher = true
                             },
-                            win_config = {
-                                border = "rounded",
-                                winhighlight = "FloatBorder:NeoTreeBorder" -- ✅ Dùng highlight riêng
-                            }
-                        },
-                        default_component_configs = {
-                            icon = {
-                                enabled = true,
-                                name = false,
-                                use_nerd_font = true
+                            window = {
+                                width = 30,
+                                position = "float",
+                                border = "rounded", -- ✅ Viền bo tròn
+                                mappings = {
+                                    ["<Space>"] = "toggle_node",
+                                    ["<CR>"] = "open",
+                                    ["o"] = "open",
+                                    ["O"] = "system_open",
+                                    ["r"] = "rename",
+                                    ["n"] = "add",
+                                    ["d"] = "delete"
+                                },
+                                win_config = {
+                                    border = "rounded",
+                                    winhighlight = "FloatBorder:NeoTreeBorder" -- ✅ Dùng highlight riêng
+                                }
+                            },
+                            default_component_configs = {
+                                icon = {
+                                    enabled = true,
+                                    name = false,
+                                    use_nerd_font = true
+                                }
                             }
                         }
-                    }
-                )
+                    )
 
-                vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {desc = "Toggle NeoTree"})
-            end
-        },
-        -- ⚡ Autocomplete
-        {
-            "hrsh7th/nvim-cmp",
-            event = "InsertEnter",
-            dependencies = {
-                "hrsh7th/cmp-nvim-lsp",
-                "hrsh7th/cmp-buffer",
-                "hrsh7th/cmp-path",
-                "saadparwaiz1/cmp_luasnip",
-                "L3MON4D3/LuaSnip",
-                "rafamadriz/friendly-snippets"
+                    vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {desc = "Toggle NeoTree"})
+                end
             },
-            config = function()
-                local cmp = require("cmp")
-                local luasnip = require("luasnip")
-                require("luasnip.loaders.from_vscode").lazy_load()
+            -- ⚡ Autocomplete
+            {
+                "hrsh7th/nvim-cmp",
+                event = "InsertEnter",
+                dependencies = {
+                    "hrsh7th/cmp-nvim-lsp",
+                    "hrsh7th/cmp-buffer",
+                    "hrsh7th/cmp-path",
+                    "saadparwaiz1/cmp_luasnip",
+                    "L3MON4D3/LuaSnip",
+                    "rafamadriz/friendly-snippets"
+                },
+                config = function()
+                    local cmp = require("cmp")
+                    local luasnip = require("luasnip")
+                    require("luasnip.loaders.from_vscode").lazy_load()
 
-                cmp.setup(
-                    {
-                        snippet = {
-                            expand = function(args)
-                                luasnip.lsp_expand(args.body)
-                            end
-                        },
-                        mapping = cmp.mapping.preset.insert(
-                            {
-                                ["<Tab>"] = cmp.mapping.select_next_item(),
-                                ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-                                ["<CR>"] = cmp.mapping.confirm({select = true}),
-                                ["<C-Space>"] = cmp.mapping.complete()
-                            }
-                        ),
-                        sources = cmp.config.sources(
-                            {
-                                {name = "nvim_lsp"},
-                                {name = "luasnip"},
-                                {name = "buffer"},
-                                {name = "path"}
-                            }
-                        )
-                    }
-                )
-            end
-        },
-        -- ✨ Formatter
-        {
-            "stevearc/conform.nvim",
-            config = function()
-                require("conform").setup(
-                    {
-                        formatters_by_ft = {
-                            lua = {"stylua"},
-                            javascript = {"prettier"},
-                            typescript = {"prettier"},
-                            cpp = {"clang-format"},
-                            c = {"clang-format"},
-                            html = {"prettier"},
-                            css = {"prettier"},
-                            json = {"prettier"}
-                        },
-                        format_on_save = {
-                            timeout_ms = 1000,
-                            lsp_fallback = true
-                        }
-                    }
-                )
-            end
-        },
-        -- 🔧 LSP + Mason
-        {
-            "neovim/nvim-lspconfig",
-            dependencies = {
-                "williamboman/mason.nvim",
-                "williamboman/mason-lspconfig.nvim"
-            },
-            config = function()
-                require("mason").setup()
-                require("mason-lspconfig").setup(
-                    {
-                        ensure_installed = {"lua_ls", "typescript-language-server", "clangd"},
-                        automatic_installation = true
-                    }
-                )
-
-                local capabilities = require("cmp_nvim_lsp").default_capabilities()
-                local lspconfig = require("lspconfig")
-
-                require("mason-lspconfig").setup_handlers(
-                    {
-                        function(server_name)
-                            lspconfig[server_name].setup(
+                    cmp.setup(
+                        {
+                            snippet = {
+                                expand = function(args)
+                                    luasnip.lsp_expand(args.body)
+                                end
+                            },
+                            mapping = cmp.mapping.preset.insert(
                                 {
-                                    capabilities = capabilities
+                                    ["<Tab>"] = cmp.mapping.select_next_item(),
+                                    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+                                    ["<CR>"] = cmp.mapping.confirm({select = true}),
+                                    ["<C-Space>"] = cmp.mapping.complete()
+                                }
+                            ),
+                            sources = cmp.config.sources(
+                                {
+                                    {name = "nvim_lsp"},
+                                    {name = "luasnip"},
+                                    {name = "buffer"},
+                                    {name = "path"}
                                 }
                             )
-                        end
-                    }
-                )
-            end
-        },
-        -- 🔍 Fuzzy Finder: Telescope
-        {
-            "nvim-telescope/telescope.nvim",
-            dependencies = {
-                "nvim-lua/plenary.nvim"
-            },
-            config = function()
-                local telescope = require("telescope")
-                telescope.setup(
-                    {
-                        defaults = {
-                            layout_config = {
-                                horizontal = {preview_width = 0.6}
-                            },
-                            sorting_strategy = "ascending",
-                            layout_strategy = "horizontal"
                         }
-                    }
-                )
+                    )
+                end
+            },
+            -- ✨ Formatter
+            {
+                "stevearc/conform.nvim",
+                config = function()
+                    require("conform").setup(
+                        {
+                            formatters_by_ft = {
+                                lua = {"stylua"},
+                                javascript = {"prettier"},
+                                typescript = {"prettier"},
+                                cpp = {"clang-format"},
+                                c = {"clang-format"},
+                                html = {"prettier"},
+                                css = {"prettier"},
+                                json = {"prettier"}
+                            },
+                            format_on_save = {
+                                timeout_ms = 1000,
+                                lsp_fallback = true
+                            }
+                        }
+                    )
+                end
+            },
+            -- 🔧 LSP + Mason
+            {
+                "neovim/nvim-lspconfig",
+                dependencies = {
+                    "williamboman/mason.nvim",
+                    "williamboman/mason-lspconfig.nvim"
+                },
+                config = function()
+                    require("mason").setup()
+                    require("mason-lspconfig").setup(
+                        {
+                            ensure_installed = {"lua_ls", "typescript-language-server", "clangd"},
+                            automatic_installation = true
+                        }
+                    )
 
-                -- Keymap ví dụ
-                vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", {desc = "🔍 Find files"})
-                vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", {desc = "🔍 Live grep"})
-                vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>", {desc = "🔍 Find buffers"})
-                vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", {desc = "🔍 Help tags"})
-            end
+                    local capabilities = require("cmp_nvim_lsp").default_capabilities()
+                    local lspconfig = require("lspconfig")
+
+                    require("mason-lspconfig").setup_handlers(
+                        {
+                            function(server_name)
+                                lspconfig[server_name].setup(
+                                    {
+                                        capabilities = capabilities
+                                    }
+                                )
+                            end
+                        }
+                    )
+                end
+            },
+            -- 🔍 Fuzzy Finder: Telescope
+            {
+                "nvim-telescope/telescope.nvim",
+                dependencies = {
+                    "nvim-lua/plenary.nvim"
+                },
+                config = function()
+                    local telescope = require("telescope")
+                    telescope.setup(
+                        {
+                            defaults = {
+                                layout_config = {
+                                    horizontal = {preview_width = 0.6}
+                                },
+                                sorting_strategy = "ascending",
+                                layout_strategy = "horizontal"
+                            }
+                        }
+                    )
+
+                    -- Keymap ví dụ
+                    vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", {desc = "🔍 Find files"})
+                    vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", {desc = "🔍 Live grep"})
+                    vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>", {desc = "🔍 Find buffers"})
+                    vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", {desc = "🔍 Help tags"})
+                end
+            },
+            -- 🖼 Start screen: Alpha
+            {
+                "goolord/alpha-nvim",
+                dependencies = {"nvim-tree/nvim-web-devicons"},
+                config = function()
+                    local dashboard = require("alpha.themes.dashboard")
+                    dashboard.section.header.val = {
+                        [[                                              ]],
+                        [[ ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
+                        [[ ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
+                        [[ ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
+                        [[ ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
+                        [[ ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
+                        [[ ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]]
+                    }
+                    require("alpha").setup(dashboard.config)
+                end
+            }
         },
-        -- 🖼 Start screen: Alpha
         {
-            "goolord/alpha-nvim",
-            dependencies = {"nvim-tree/nvim-web-devicons"},
-            config = function()
-                local dashboard = require("alpha.themes.dashboard")
-                dashboard.section.header.val = {
-                    [[                                              ]],
-                    [[ ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
-                    [[ ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
-                    [[ ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
-                    [[ ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
-                    [[ ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
-                    [[ ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]]
+            "stevearc/dressing.nvim",
+            event = "VeryLazy",
+            opts = {
+                input = {
+                    border = "rounded",
+                    win_options = {
+                        winhighlight = "Normal:Normal,FloatBorder:CalculatorBorder"
+                    }
                 }
-                require("alpha").setup(dashboard.config)
-            end
+            }
         },
         -- 🔔 UI đẹp Snack
         {
