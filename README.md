@@ -6,11 +6,50 @@
 <br>
 <img src="https://logosrated.net/wp-content/uploads/parser/Neovim-Logo-1.png" width="132" height="150">  
 
+___Remember to download "Lazy.nvim", "ripgrep" and "fd"___
 
-
+***Plugins:***
+   * ● alpha-nvim 
+   *  ● catppuccin <em>(4 themes)</em>
+         * Latte <em>(light theme)</em>
+         * Frappe <em>(semi-light theme)</em>
+         * Macchiato <em>(semi-dark theme)</em>
+         * Mocha <em>(dark theme)</em>
+   * ● cmp-nvim-lsp | cmp_nvim_lsp | nvim-lspconfig
+   * ● conform.nvim  
+   * ● lazy.nvim 
+   * ● lualine.nvim 
+   * ● mason-lspconfig.nvim | nvim-lspconfig
+   * ● mason.nvim | nvim-lspconfig
+   * ● neo-tree.nvim 
+   * ● noice.nvim 
+   * ● nui.nvim | snacks.nvim
+   * ● nvim-lspconfig
+   * ● nvim-notify | noice.nvim
+   * ● nvim-web-devicons | alpha-nvim
+   * ● plenary.nvim | snacks.nvim
+   * ● snacks.nvim 
+   * ● telescope.nvim 
+   * ○ cmp-buffer | nvim-cmp 
+   * ○ cmp-path | nvim-cmp 
+   * ○ cmp_luasnip | nvim-cmp 
+   * ○ friendly-snippets | nvim-cmp 
+   * ○ LuaSnip | nvim-cmp 
+   * ○ nvim-cmp | InsertEnter
 ```
 -- Set leader key
 vim.g.mapleader = " "
+-- 👁️ Hiển thị số dòng
+vim.opt.number = true
+vim.opt.relativenumber = false -- hoặc true nếu bạn thích dòng tương đối
+
+-- ⬅️ Cấu hình tab & thụt lề
+vim.opt.tabstop = 4 -- số space cho mỗi tab
+vim.opt.shiftwidth = 4 -- số space khi thụt dòng bằng >>
+vim.opt.expandtab = true -- dùng space thay vì ký tự tab
+vim.opt.smartindent = true
+-- 🎨 Tô màu xanh cho viền của Neo-tree
+vim.cmd([[highlight NeoTreeBorder guifg=#80a0ff]])
 
 -- Load lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -78,7 +117,8 @@ require("lazy").setup(
                         },
                         window = {
                             width = 30,
-                            position = "left",
+                            position = "float",
+                            border = "rounded", -- ✅ Viền bo tròn
                             mappings = {
                                 ["<Space>"] = "toggle_node",
                                 ["<CR>"] = "open",
@@ -87,6 +127,10 @@ require("lazy").setup(
                                 ["r"] = "rename",
                                 ["n"] = "add",
                                 ["d"] = "delete"
+                            },
+                            win_config = {
+                                border = "rounded",
+                                winhighlight = "FloatBorder:NeoTreeBorder" -- ✅ Dùng highlight riêng
                             }
                         },
                         default_component_configs = {
